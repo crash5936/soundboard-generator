@@ -12,6 +12,10 @@ type Sound struct {
 }
 
 func main() {
+	generate_html()
+}
+
+func generate_html() {
 	sounds, err := os.ReadDir("./sounds/")
 
 	check_error(err)
@@ -26,12 +30,14 @@ func main() {
 
 	check_error(err)
 
-	tmpl_str, err := os.ReadFile("templates/test.tmpl")
+	tmpl_str, err := os.ReadFile("templates/soundboard.tmpl")
 
 	tmpl, err := template.New("soundboard").Parse(string(tmpl_str))
+
 	if tmpl == nil {
 		panic("Failed parsing tmpl.")
 	}
+
 	check_error(err)
 
 	f, err := os.Create("output/output.html")
@@ -45,7 +51,10 @@ func main() {
 	err = f.Close()
 
 	check_error(err)
+}
 
+func prepare_sounds_config() {
+	return
 }
 
 func get_sound_names(files []fs.DirEntry) []string {
