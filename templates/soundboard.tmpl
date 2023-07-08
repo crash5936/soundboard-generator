@@ -16,7 +16,7 @@
                 <audio preload="auto" id="{{ .Name }}">
                     <source src="{{ .Name }}.mp3" type="audio/mp3"></source>
                 </audio>
-                <button type="button" onclick="document.getElementById('{{ . }}').play()">
+                <button type="button" onclick="document.getElementById('{{ .Name }}').play()">
                     {{ .Description }}
                 </button>
             </div>
