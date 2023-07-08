@@ -20,41 +20,38 @@ type SoundsToml struct {
 }
 
 func main() {
-	prepare_sounds_config("sounds/")
-	// generate_html()
+	// prepare_sounds_config("sounds/")
+	sounds := read_sounds_config("sounds/")
+	generate_html(sounds)
 }
 
-func generate_html() {
-
-	sound_names := get_sound_names("sounds/")
-
-	var sound_structs []Sound
-
-	for _, name := range sound_names {
-		sound_structs = append(sound_structs, Sound{name, name})
-	}
+func generate_html(sounds []Sound) {
 
 	tmpl_str, err := os.ReadFile("templates/soundboard.tmpl")
+	check_error(err)
 
 	tmpl, err := template.New("soundboard").Parse(string(tmpl_str))
-
 	if tmpl == nil {
 		panic("Failed parsing tmpl.")
 	}
-
 	check_error(err)
 
 	f, err := os.Create("output/output.html")
-	
 	check_error(err)
 	
-	err = tmpl.Execute(f, sound_structs)
-
+	err = tmpl.Execute(f, sounds)
 	check_error(err)
 
 	err = f.Close()
-
 	check_error(err)
+}
+
+func read_sounds_config(sounds_path string) []Sound {
+	sounds_toml_path := filepath.Join(sounds_path, "sounds.toml")
+	var config SoundsToml
+	_, err := toml.DecodeFile(sounds_toml_path, &config)
+	check_error(err)
+	return config.Sounds
 }
 
 func prepare_sounds_config(sounds_path string) {
