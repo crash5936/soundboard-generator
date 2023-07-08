@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"html/template"
 	"log"
 	"os"
@@ -56,8 +55,6 @@ func read_sounds_config(sounds_path string) []Sound {
 
 func prepare_sounds_config(sounds_path string) {
 	sound_names := get_sound_names(sounds_path)
-
-	fmt.Println(sound_names)
 
 	var sounds []Sound
 	var config SoundsToml
