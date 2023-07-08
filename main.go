@@ -5,6 +5,7 @@ import (
 	"html/template"
 	"log"
 	"os"
+	"path/filepath"
 	"regexp"
 
 	"github.com/BurntSushi/toml"
@@ -15,7 +16,7 @@ type Sound struct {
 }
 
 type SoundsToml struct {
-	Sounds map[string]Sound
+	Sounds []Sound
 }
 
 func main() {
@@ -61,18 +62,16 @@ func prepare_sounds_config(sounds_path string) {
 
 	fmt.Println(sound_names)
 
-	// var sounds []Sound
-	var sounds map[string]Sound
-	sounds = make(map[string]Sound)
+	var sounds []Sound
 	var config SoundsToml
 
 	for _, name := range sound_names {
-		sounds[name] = Sound{name, name}
+		sounds = append(sounds, Sound{name, name})
 	}
 
 	config = SoundsToml{Sounds: sounds}
 
-	f, err := os.Create("sounds/sounds.toml")
+	f, err := os.Create(filepath.Join(sounds_path, "sounds.toml"))
 	check_error(err)
 
 	err = toml.NewEncoder(f).Encode(config)
